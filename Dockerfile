@@ -15,9 +15,9 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
 
-RUN composer install --no-scripts --no-autoloader --prefer-dist --verbose
-
 COPY . /var/www/html
+
+RUN composer install --prefer-dist --no-scripts --no-interaction --verbose
 
 RUN cp .env.example .env
 
@@ -30,4 +30,4 @@ RUN chmod -R 755 /var/www/html/storage \
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan key:generate && php artisan migrate --seed --force && apache2-foreground"]
+CMD ["sh", "-c", "composer install && php artisan key:generate && php artisan migrate --seed --force && apache2-foreground"]
